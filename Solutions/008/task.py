@@ -1,42 +1,43 @@
-from operator import itemgetter
-from typing import List, Iterable
-
 from math import prod
+from typing import Generator, List
+
 
 def parse_input(input_string: str) -> List[int]:
     """
-    Parses the input string
+    Parses the input string.
 
-    :param input_string:
-    :return:
+    :param input_string: The input string
+    :return: A list of integers
     """
-    return [int(i) for i in input_string.replace('\n', '')]
+    return [int(i) for i in input_string.replace("\n", "")]
 
 
-def grouped_list_generator(iterable: Iterable[int], batch_size: int) -> List[int]:
+def grouped_list_generator(
+    iterable: List[int], batch_size: int
+) -> Generator[List[int], None, None]:
     """
+    Returns an iterable of lists of ints of batch size.
 
-
-    :param iterable:
-    :param batch_size:
-    :return:
+    :param iterable: The input data
+    :param batch_size: The batch size of returned groups
+    :return: Integer groups
     """
     for start_index in range(0, len(iterable) - (batch_size - 1)):
-        yield iterable[start_index:start_index+batch_size]
+        yield iterable[start_index : start_index + batch_size]
 
 
 def find_max_product(input_string: str, length: int) -> int:
     """
+    Returns the max product of a given length within the input string.
 
-    :param input_list:
-    :param length:
-    :return:
+    :param input_string: The input data
+    :param length: The given length
+    :return: The max product
     """
     data = parse_input(input_string)
     data_generator = grouped_list_generator(data, batch_size=length)
-    max_group = max([(sum(batch), batch) for batch in data_generator])
-    return prod(max_group[1]), max_group[1]
-
+    max_group = max([prod(batch) for batch in data_generator])
+    return max_group
 
 
 INPUT_STRING = """
@@ -61,7 +62,6 @@ INPUT_STRING = """
 05886116467109405077541002256983155200055935729725
 71636269561882670428252483600823257530420752963450
 """
-
 
 if __name__ == "__main__":
     print(find_max_product(INPUT_STRING, 4))
